@@ -1,15 +1,29 @@
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-
-const PORT = process.env.PORT || 3000;
+const cors = require("cors");
 
 const router = require("./router");
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, {});
 
 app.use(router);
+app.use(cors());
 
-httpServer.listen(PORT, () => console.log("server satrted on", PORT));
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  socket.on("join", ({ name, room }) => {
+    console.log(name, room);
+  });
+});
+
+httpServer.listen(5000, () => {
+  console.log("Sever has started");
+});
