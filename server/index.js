@@ -3,11 +3,12 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 
+const { getUser, addUser, getUsersInRoom, removeUser } = require("./users");
+
 const router = require("./router");
 
 const app = express();
 
-app.use(router);
 app.use(cors());
 
 const httpServer = createServer(app);
@@ -19,10 +20,39 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("join", ({ name, room }) => {
-    console.log(name, room);
+  socket.on("join", ({ name, room }, callback) => {
+    const { error, user } = addUser({ name, room, id: socket.id });
+
+    if (error) return callback(error);
+
+    socket.join(user.room);
+
+    socket.emit("message", {
+      user: "Admin",
+      text: `${user.name}, Welcome to room ${user.room}`,
+    });
+
+    socket
+      .to(user.room)
+      .emit("message", { user: "Admin", text: `${user.name}, has joined!` });
+
+    callback();
+  });
+
+  socket.on("sendMessage", (message, callback) => {
+    const user = getUser(socket.id);
+
+    io.in(user.room).emit("message", { user: user.name, text: message });
+
+    callback();
+  });
+
+  socket.on("disconnect", () => {
+    console.log("disconnected socket");
   });
 });
+
+app.use(router);
 
 httpServer.listen(5000, () => {
   console.log("Sever has started");
