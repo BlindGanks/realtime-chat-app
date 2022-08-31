@@ -20,7 +20,7 @@ const Chat = () => {
     socket.emit("join", { name, room }, () => {});
 
     return () => {
-      socket.emit("disconnect");
+      socket.disconnect();
       socket.off();
     };
   }, [ENDPOINT]);
@@ -37,7 +37,6 @@ const Chat = () => {
     if (message) socket.emit("sendMessage", message, () => setMessage(""));
   };
 
-  console.log(messages);
   return (
     <div className="outerContainer">
       <div className="container">
