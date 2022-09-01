@@ -28,13 +28,13 @@ io.on("connection", (socket) => {
     socket.join(user.room);
 
     socket.emit("message", {
-      user: "Admin",
+      user: "admin",
       text: `${user.name}, Welcome to room ${user.room}`,
     });
 
     socket
       .to(user.room)
-      .emit("message", { user: "Admin", text: `${user.name}, has joined!` });
+      .emit("message", { user: "admin", text: `${user.name}, has joined!` });
 
     callback();
   });
@@ -48,7 +48,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("disconnected socket");
+    const user = removeUser(socket.id);
+
+    if (user) {
+      io.in(user.room).emit("message", {
+        user: "admin",
+        text: `${user.name} has left!`,
+      });
+    }
   });
 });
 
