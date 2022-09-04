@@ -14,7 +14,7 @@ app.use(cors());
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://realtime-chat-app-eight.vercel.app",
     methods: ["GET", "POST"],
   },
 });
@@ -73,3 +73,5 @@ app.use(router);
 httpServer.listen(5000, () => {
   console.log("Sever has started");
 });
+
+module.exports = app;
