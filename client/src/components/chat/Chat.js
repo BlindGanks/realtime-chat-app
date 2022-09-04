@@ -14,7 +14,7 @@ const Chat = () => {
   const ENDPOINT = "https://realtime-chat-app-backend.vercel.app";
   useEffect(() => {
     const { name, room } = queryString.parse(window.location.search);
-    socket = io(ENDPOINT);
+    socket = io(ENDPOINT, { transports: ["websocket"] });
 
     setName(name);
     setRoom(room);
