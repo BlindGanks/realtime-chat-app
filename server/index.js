@@ -9,12 +9,17 @@ const router = require("./router");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://realtime-chat-app-eight.vercel.app",
+    methods: ["GET", "POST"],
+  })
+);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: "https://realtime-chat-app-eight.vercel.app",
     methods: ["GET", "POST"],
   },
 });
