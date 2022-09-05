@@ -16,8 +16,13 @@ const Chat = () => {
     const { name, room } = queryString.parse(window.location.search);
     socket = io(ENDPOINT, {
       path: "/socket.io",
-      transports: "websocket",
+      transports: ["websocket", "polling"],
       secure: true,
+    });
+
+    socket.on("connect_error", () => {
+      // revert to classic upgrade
+      socket.io.opts.transports = ["polling", "websocket"];
     });
 
     setName(name);
