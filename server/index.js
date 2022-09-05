@@ -21,6 +21,7 @@ const io = new Server(httpServer, {
   cors: {
     origin: "https://realtime-chat-app-eight.vercel.app",
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
