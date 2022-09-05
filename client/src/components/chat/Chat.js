@@ -26,11 +26,13 @@ const Chat = () => {
       if (error) alert(error);
     });
 
-    const transport = socket.conn.transport.name; // in most cases, "polling"
-    console.log(transport);
-    socket.conn.on("upgrade", () => {
-      const upgradedTransport = socket.conn.transport.name; // in most cases, "websocket"
-      console.log("upgraded transport ", upgradedTransport);
+    io.on("connection", (socket) => {
+      const transport = socket.conn.transport.name; // in most cases, "polling"
+      console.log(transport);
+      socket.conn.on("upgrade", () => {
+        const upgradedTransport = socket.conn.transport.name; // in most cases, "websocket"
+        console.log("upgraded ", upgradedTransport);
+      });
     });
 
     return () => {
