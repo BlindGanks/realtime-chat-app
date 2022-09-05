@@ -15,14 +15,8 @@ const Chat = () => {
   useEffect(() => {
     const { name, room } = queryString.parse(window.location.search);
     socket = io(ENDPOINT, {
-      transports: ["websocket", "polling"],
-      secure: true,
+      transports: ["websocket"],
       withCredentials: true,
-    });
-
-    socket.on("connect_error", () => {
-      // revert to classic upgrade
-      socket.io.opts.transports = ["polling", "websocket"];
     });
 
     setName(name);
