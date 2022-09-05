@@ -15,9 +15,9 @@ const Chat = () => {
   useEffect(() => {
     const { name, room } = queryString.parse(window.location.search);
     socket = io(ENDPOINT, {
-      path: "/socket.io",
       transports: ["websocket", "polling"],
       secure: true,
+      withCredentials: true,
     });
 
     socket.on("connect_error", () => {
