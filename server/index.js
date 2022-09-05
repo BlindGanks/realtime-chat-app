@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
 
 app.use(router);
 
-httpServer.listen(5000, () => {
+httpServer.listen(process.env.PORT || 5000, () => {
   console.log("Sever has started");
 });
 
