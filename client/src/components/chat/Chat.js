@@ -15,6 +15,7 @@ const Chat = () => {
   useEffect(() => {
     const { name, room } = queryString.parse(window.location.search);
     socket = io(ENDPOINT, {
+      transports: ["websocket"],
       withCredentials: true,
     });
 
